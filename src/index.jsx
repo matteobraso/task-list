@@ -72,7 +72,13 @@ class ToDoList extends Component {
 
           <ul>
             {this.state.toDoList.map((element, index) => {
-              return <Task key={index} toDoName={element} counterUpdate={isDone => this.counterUpdate(isDone)} />;
+              return (
+                <Task
+                  key={index}
+                  toDoName={element}
+                  counterUpdate={isDone => this.counterUpdate(isDone)}
+                />
+              );
             })}
           </ul>
         </div>
