@@ -35,7 +35,11 @@ class ToDoList extends Component {
   }
 
   counterUpdate = (isDone) => {
-    if (isDone === true) { this.setState({ counter: this.state.counter - 1 }); } else { this.setState({ counter: this.state.counter + 1 }); }
+    if (isDone === true) {
+      this.setState({ counter: this.state.counter - 1 });
+    } else {
+      this.setState({ counter: this.state.counter + 1 });
+    }
   }
 
   render() {
