@@ -3,123 +3,91 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable react/no-multi-comp */
 /* eslint-disable react/destructuring-assignment */
-import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
+import React, { useState } from "react";
+import ReactDOM from "react-dom";
 
-import '../assets/stylesheets/application.scss';
+import "../assets/stylesheets/application.scss";
 
-class ToDoList extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      toDoList: [],
-      toDoToAdd: "",
-      counter: 0
-    };
-    this.handleClick.bind(this);
-    this.onTextChange.bind(this);
-  }
+const ToDoList = () => {
+  const [count, setCount] = useState(0);
+  const [toDoList, setToDoList] = useState([]);
+  const [toDoToAdd, setToDoToAdd] = useState("");
 
-  onTextChange(event) {
-    this.setState({ toDoToAdd: event.currentTarget.value });
-  }
+  const onTextChange = () => {
+    setToDoToAdd(toDoToAdd);
+  };
 
-  handleClick = (event) => {
-    event.preventDefault();
-    const toDoList = this.state.toDoList;
-    toDoList.push(this.state.toDoToAdd);
-    this.setState({
-      toDoList,
-      counter: this.state.counter + 1
-    });
-  }
+  const handleClick = () => {
+    const newList = toDoList.push(toDoToAdd);
+    setToDoList(newList);
+    setCount(count + 1);
+  };
 
-  counterUpdate = (isDone) => {
+  const counterUpdate = (isDone) => {
     if (isDone === true) {
-      this.setState({ counter: this.state.counter - 1 });
+      setCount(count - 1);
     } else {
-      this.setState({ counter: this.state.counter + 1 });
+      setCount(count + 1);
     }
-  }
+  };
 
-  render() {
-    return (
-      <>
-        <div>
-          <h1>To Do List</h1>
-          <form>
-            <input
-              type="text"
-              defaultValue={this.state.toDoToAdd}
-              onChange={event => this.onTextChange(event)}
-            />
+  return (
+    <>
+      <div>
+        <h1>To Do List</h1>
+        <form>
+          <input type="text" value={toDoToAdd} onChange={onTextChange} />
 
-            <button
-              type="submit"
-              onClick={(event) => {
-                return this.handleClick(event);
-              }}
-            >
-              Add
-            </button>
-          </form>
+          <button type="submit" onClick={handleClick}>
+            Add
+          </button>
+        </form>
 
-          <h2 id="list-heading">
-            {this.state.counter}
-            {' '}
-            tasks remaining
-          </h2>
+        <h2 id="list-heading">
+          {count}
+          tasks remaining
+        </h2>
 
-          <ul>
-            {this.state.toDoList.map((element, index) => {
-              return (
-                <Task
-                  key={index}
-                  toDoName={element}
-                  counterUpdate={isDone => this.counterUpdate(isDone)}
-                />
-              );
-            })}
-          </ul>
-        </div>
-      </>
-    );
-  }
-}
+        <ul>
+          {toDoList.map((element) => {
+            return (
+              <Task
+                key={element.id}
+                toDoName={element}
+                counterUpdate={isDone => counterUpdate(isDone)}
+              />
+            );
+          })}
+        </ul>
+      </div>
+    </>
+  );
+};
 
-class Task extends Component {
-  constructor(props) {
-    super(props);
-    this.state = { isDone: false };
-  }
+const Task = (props) => {
+  const [isDone, setIsDone] = useState(false);
 
-  handleClick = () => {
-    const isDone = !this.state.isDone;
-    this.setState({ isDone });
-    this.props.counterUpdate(isDone);
-  }
+  const handleClick = () => {
+    setIsDone(!isDone);
+    props.counterUpdate(isDone);
+  };
+  return (
+    <>
+      <li style={isDone ? { textDecoration: "line-through" } : null}>
+        <input
+          id="todo-0"
+          type="checkbox"
+          onClick={() => {
+            return handleClick();
+          }}
+        />
+        {props.toDoName}
+      </li>
+    </>
+  );
+};
 
-  render() {
-    return (
-      <>
-        <li
-          style={this.state.isDone ? { textDecoration: "line-through" } : null}
-        >
-          <input
-            id="todo-0"
-            type="checkbox"
-            onClick={() => {
-              return this.handleClick();
-            }}
-          />
-          {this.props.toDoName}
-        </li>
-      </>
-    );
-  }
-}
-
-const root = document.getElementById('root');
+const root = document.getElementById("root");
 if (root) {
   ReactDOM.render(<ToDoList />, root);
 }
