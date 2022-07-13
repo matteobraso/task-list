@@ -36,7 +36,7 @@ const ToDoList = () => {
       <div>
         <h1>To Do List</h1>
         <form>
-          <input type="text" value={toDoToAdd} onChange={onTextChange} />
+          <input type="text" defaultValue={toDoToAdd} onChange={onTextChange} />
 
           <button type="submit" onClick={handleClick}>
             Add
